@@ -66,10 +66,11 @@ public class Hashtag {
         public void reduce(Text key, Iterable<LongWritable> values, Context context)
                 throws IOException, InterruptedException {
             Text word = new Text();
-            
+            String tmp;
             // Sum all the occurrences of the word (key)
             for (LongWritable value : values) {
-                word.set(value.get());
+                tmp = String.valueOf(value.get());
+                word.set(tmp);
             }
             context.write(key,word);
         }
