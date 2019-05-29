@@ -22,9 +22,11 @@ public class Hashtag {
 
         // Use the WordCount.class file to point to the job jar
         job.setJarByClass(Hashtag.class);
+        job.setMapOutputKeyClass(Text.class);
+        job.setMapOutputValueClass(LongWritable.class);
 
         job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(IntWritable.class);
+        job.setOutputValueClass(Text.class);
 
         job.setMapperClass(Map.class);
         job.setReducerClass(Reduce.class);
@@ -40,8 +42,7 @@ public class Hashtag {
         job.waitForCompletion(true);
     }
 
-    public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {
-        private final static IntWritable one = new IntWritable(1);
+    public static class Map extends Mapper<LongWritable, Text, Text, LongWritable> {
         private Text word = new Text();
 
         public void map(LongWritable key, Text value, Context context) 
@@ -51,9 +52,9 @@ public class Hashtag {
             String[] fields = line.split(" ");
 
             for (String hashtag : fields) {
-                if(hashtag.startWith("#")){
+                if(hashtag.matches(".*happy*.") || hashtag.matches(".*HAPPY*.")){
                     word.set(hashtag);
-                    context.write(word,one);
+                    context.write(word,key);
                 }
             }
 
@@ -61,7 +62,7 @@ public class Hashtag {
         }
     }
 
-    public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {
+    public static class Reduce extends Reducer<Text, IntWritable, Text, Text> {
         public void reduce(Text key, Iterable<IntWritable> values, Context context)
                 throws IOException, InterruptedException {
             int sum = 0;
