@@ -71,7 +71,7 @@ public class Hashtag {
             for (IntWritable value : values) {
                 sum += value.get();
             }
-            context.write(key, new IntWritable(sum));
+            context.write(key, new Text(sum));
         }
     }
 }
