@@ -65,13 +65,13 @@ public class Hashtag {
     public static class Reduce extends Reducer<Text, LongWritable, Text, Text> {
         public void reduce(Text key, Iterable<LongWritable> values, Context context)
                 throws IOException, InterruptedException {
-            int sum = 0;
+            Text word = new Text();
             
             // Sum all the occurrences of the word (key)
-            for (IntWritable value : values) {
-                sum += value.get();
+            for (LongWritable value : values) {
+                word.set(value.get());
             }
-            context.write(key, new Text(sum));
+            context.write(key,word);
         }
     }
 }
