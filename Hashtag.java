@@ -68,6 +68,7 @@ public class Hashtag {
             // Sum all the occurrences of the word (key)
             for (LongWritable value : values) {
                 tmp = String.valueOf(value.get());
+		tmp += ",";
                 word.set(tmp);
             }
             context.write(key,word);
