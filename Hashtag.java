@@ -49,14 +49,12 @@ public class Hashtag {
                 throws IOException, InterruptedException {
 
             String line = value.toString();
-            String[] fields = line.split(" ");
-
-            for (String hashtag : fields) {
-                if(hashtag.matches(".*happy*.") || hashtag.matches(".*HAPPY*.")){
-                    word.set(hashtag);
-                    context.write(word,key);
-                }
+            low_line = line.toLowerCase();
+            if(low_line.contains("happy")){
+                word.set(line);
+                context.write(word,key);
             }
+            
 
 
         }
