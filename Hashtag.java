@@ -49,8 +49,8 @@ public class Hashtag {
                 throws IOException, InterruptedException {
 
             String line = value.toString();
-            low_line = line.toLowerCase();
-            if(low_line.contains("happy")){
+            String lowline = line.toLowerCase();
+            if(lowline.contains("happy")){
                 word.set(line);
                 context.write(word,key);
             }
