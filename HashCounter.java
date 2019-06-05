@@ -37,7 +37,7 @@ public class HashCounter {
         FileOutputFormat.setOutputPath(job1, new Path(args[1]+"/temp"));
 
         // Submit the job and wait for it's completion
-        job.waitForCompletion(true);
+        job1.waitForCompletion(true);
         
         
         
