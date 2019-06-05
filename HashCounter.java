@@ -46,7 +46,9 @@ public class HashCounter {
          /*
          * Job 2: Sort based on the number of occurences
          */
-        Job job2 = Job.getInstance(conf, "SortByCountValue");
+        Configuration conf2 = new Configuration();
+        conf2.set("k","10");
+        Job job2 = Job.getInstance(conf2, "SortByCountValue");
 
         job2.setNumReduceTasks(1);
 
@@ -64,7 +66,8 @@ public class HashCounter {
         job2.setInputFormatClass(KeyValueTextInputFormat.class);
         job2.setOutputFormatClass(TextOutputFormat.class);
         
-        job2.getConfiguration().set("k", "10");
+        
+
 
         FileInputFormat.setInputPaths(job2, new Path(args[1] + "/temp"));
         FileOutputFormat.setOutputPath(job2, new Path(args[1] + "/final"));
@@ -121,10 +124,11 @@ public class HashCounter {
     }
 
     public static class SortByValueReduce extends Reducer<IntWritable, Text, Text, IntWritable> {
-        String topk = Context.getConfiguration().get("k");
+        //String topk = Context.getConfiguration().get("k");
  
+        Configuration conf2 = context.getConfiguration();
+        String topk = conf2.get("k");
         
-       // String strk = job2.getConfiguration().get("k");
         int temp = 0;
         int numk = Integer.parseInt(topk);
          
