@@ -17,30 +17,61 @@ public class HashCounter {
     public static void main(String[] args) throws Exception {
         Configuration conf = new Configuration();
 
+        
         // Create a new job
-        Job job = Job.getInstance(conf, "HashCounter");
+        //JOB1
+        Job job1 = Job.getInstance(conf, "HashCounter");
+        job1.setJarByClass(HashCounter.class);
 
-        // Use the WordCount.class file to point to the job jar
-        job.setJarByClass(HashCounter.class);
+        job1.setMapperClass(HashCounterMap.class);
+        job1.setReducerClass(HashCounterReduce.class);
+        
+        job1.setOutputKeyClass(Text.class);
+        job1.setOutputValueClass(IntWritable.class);
 
-        job.setOutputKeyClass(Text.class);
-        job.setOutputValueClass(IntWritable.class);
-
-        job.setMapperClass(Map.class);
-        job.setReducerClass(Reduce.class);
-
-        job.setInputFormatClass(TextInputFormat.class);
-        job.setOutputFormatClass(TextOutputFormat.class);
+        job1.setInputFormatClass(TextInputFormat.class);
+        job1.setOutputFormatClass(TextOutputFormat.class);
 
         // Setting the input and output locations
         FileInputFormat.addInputPath(job, new Path(args[0]));
-        FileOutputFormat.setOutputPath(job, new Path(args[1]));
+        FileOutputFormat.setOutputPath(job, new Path(args[1]+"/temp"));
 
         // Submit the job and wait for it's completion
         job.waitForCompletion(true);
+        
+        
+        
+         /*
+         * Job 2: Sort based on the number of occurences
+         */
+        Job job2 = Job.getInstance(conf, "SortByCountValue");
+
+        job2.setNumReduceTasks(1);
+
+        job2.setJarByClass(HashCounter.class);
+
+        job2.setMapperClass(SortByValueMap.class);
+        job2.setReducerClass(SortByValueReduce.class);
+
+        job2.setMapOutputKeyClass(IntWritable.class);
+        job2.setMapOutputValueClass(Text.class);
+
+        job2.setOutputKeyClass(Text.class);
+        job2.setOutputValueClass(IntWritable.class);
+
+        job2.setInputFormatClass(KeyValueTextInputFormat.class);
+        job2.setOutputFormatClass(TextOutputFormat.class);
+
+        FileInputFormat.setInputPaths(job2, new Path(args[1] + "/temp"));
+        FileOutputFormat.setOutputPath(job2, new Path(args[1] + "/final"));
+
+        job2.waitForCompletion(true);
+        
+        
+        
     }
 
-    public static class Map extends Mapper<LongWritable, Text, Text, IntWritable> {
+    public static class HashCounterMap extends Mapper<LongWritable, Text, Text, IntWritable> {
         private final static IntWritable one = new IntWritable(1);
         private Text word = new Text();
 
@@ -61,7 +92,7 @@ public class HashCounter {
         }
     }
 
-    public static class Reduce extends Reducer<Text, IntWritable, Text, IntWritable> {
+    public static class HashCounterReduce extends Reducer<Text, IntWritable, Text, IntWritable> {
         public void reduce(Text key, Iterable<IntWritable> values, Context context)
                 throws IOException, InterruptedException {
             int sum = 0;
@@ -73,4 +104,27 @@ public class HashCounter {
             context.write(key, new IntWritable(sum));
         }
     }
+    
+    public static class SortByValueMap extends Mapper<Text, Text, IntWritable, Text> {
+        private Text word = new Text();
+        IntWritable frequency = new IntWritable();
+
+        public void map(Text key, Text value, Context context)
+                throws IOException, InterruptedException {
+            frequency.set(Integer.parseInt(value.toString()));
+            context.write(frequency, key);
+        }
+    }
+
+    public static class SortByValueReduce extends Reducer<IntWritable, Text, Text, IntWritable> {
+        public void reduce(IntWritable key, Iterable<Text> values, Context context)
+                throws IOException, InterruptedException {
+            for (Text value : values) {
+                context.write(value, key);
+            }
+        }
+    }
+    
+    
+    
 }
