@@ -127,7 +127,7 @@ public class HashCounter {
         //String topk = Context.getConfiguration().get("k");
  
         Configuration conf = Context.getConfiguration();
-        String topk = conf.get("k");
+        conf.get("k");
         
         int temp = 0;
         int numk = Integer.parseInt(topk);
