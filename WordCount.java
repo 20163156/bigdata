@@ -109,7 +109,7 @@ public class WordCount {
     }
 
     public static class SortByValueReduce extends Reducer<IntWritable, Text, Text, IntWritable> {
-        String strk = Context.getConfiguration().get("k")
+        String strk = job2.getConfiguration().get("k")
         int numk;
         int temp = 0;
         numk = Integer.parseInt(strk);
