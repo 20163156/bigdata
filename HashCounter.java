@@ -121,14 +121,13 @@ public class HashCounter {
 
     public static class SortByValueReduce extends Reducer<IntWritable, Text, Text, IntWritable> {
         String strk = Context.getConfiguration().get("k");
-        int numk;
         int temp = 0;
-        numk = Integer.parseInt(strk);
+        int numk = Integer.parseInt(strk);
          
         public void reduce(IntWritable key, Iterable<Text> values, Context context)
                 throws IOException, InterruptedException {
             for (Text value : values) {
-                if(temp > 10){
+                if(numk > temp){
                     break;
                 }
                 temp++;
