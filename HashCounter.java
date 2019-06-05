@@ -47,9 +47,9 @@ public class HashCounter {
          * Job 2: Sort based on the number of occurences
          */
         
-        Configuration conf = new Configuration();
-        conf.set("k","10");
-        Job job2 = Job.getInstance(conf, "SortByCountValue");
+        Configuration conf2 = new Configuration();
+        conf2.set("k","10");
+        Job job2 = Job.getInstance(conf2, "SortByCountValue");
 
         job2.setNumReduceTasks(1);
 
