@@ -33,8 +33,8 @@ public class HashCounter {
         job1.setOutputFormatClass(TextOutputFormat.class);
 
         // Setting the input and output locations
-        FileInputFormat.addInputPath(job, new Path(args[0]));
-        FileOutputFormat.setOutputPath(job, new Path(args[1]+"/temp"));
+        FileInputFormat.addInputPath(job1, new Path(args[0]));
+        FileOutputFormat.setOutputPath(job1, new Path(args[1]+"/temp"));
 
         // Submit the job and wait for it's completion
         job.waitForCompletion(true);
