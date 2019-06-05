@@ -121,7 +121,7 @@ public class HashCounter {
     }
 
     public static class SortByValueReduce extends Reducer<IntWritable, Text, Text, IntWritable> {
-        String topk = Context.getConfiguration().get("ARGUMENET_NAME")
+        String topk = Context.getConfiguration().get("k");
  
         
        // String strk = job2.getConfiguration().get("k");
