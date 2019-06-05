@@ -51,7 +51,7 @@ public class HashCounter {
             String[] fields = line.split(" ");
 
             for (String hashtag : fields) {
-                if(hashtag.startWith("#")){
+                if(hashtag.startsWith("#")){
                     word.set(hashtag);
                     context.write(word,one);
                 }
