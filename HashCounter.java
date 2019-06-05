@@ -21,7 +21,9 @@ public class HashCounter {
 
         
         // Create a new job
-        //JOB1
+        /*
+         * Job 1: Hashtag count
+         */
         Job job1 = Job.getInstance(conf, "HashCounter");
         job1.setJarByClass(HashCounter.class);
 
@@ -34,21 +36,20 @@ public class HashCounter {
         job1.setInputFormatClass(TextInputFormat.class);
         job1.setOutputFormatClass(TextOutputFormat.class);
 
-        // Setting the input and output locations
         FileInputFormat.addInputPath(job1, new Path(args[0]));
         FileOutputFormat.setOutputPath(job1, new Path(args[1]+"/temp"));
 
-        // Submit the job and wait for it's completion
         job1.waitForCompletion(true);
         
-        
+       
         
          /*
          * Job 2: Sort based on the number of occurences
          */
-        Configuration conf2 = new Configuration();
-        conf2.set("k","10");
-        Job job2 = Job.getInstance(conf2, "SortByCountValue");
+        
+        Configuration conf = new Configuration();
+        conf.set("k","10");
+        Job job2 = Job.getInstance(conf, "SortByCountValue");
 
         job2.setNumReduceTasks(1);
 
@@ -66,8 +67,7 @@ public class HashCounter {
         job2.setInputFormatClass(KeyValueTextInputFormat.class);
         job2.setOutputFormatClass(TextOutputFormat.class);
         
-        
-
+       
 
         FileInputFormat.setInputPaths(job2, new Path(args[1] + "/temp"));
         FileOutputFormat.setOutputPath(job2, new Path(args[1] + "/final"));
@@ -126,8 +126,8 @@ public class HashCounter {
     public static class SortByValueReduce extends Reducer<IntWritable, Text, Text, IntWritable> {
         //String topk = Context.getConfiguration().get("k");
  
-        Configuration conf2 = Context.getConfiguration();
-        String topk = conf2.get("k");
+        Configuration conf = Context.getConfiguration();
+        String topk = conf.get("k");
         
         int temp = 0;
         int numk = Integer.parseInt(topk);
