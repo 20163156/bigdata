@@ -63,7 +63,7 @@ public class HashCounter {
         job2.setInputFormatClass(KeyValueTextInputFormat.class);
         job2.setOutputFormatClass(TextOutputFormat.class);
         
-        job2.getConfiguration().set("k", 10);
+        job2.getConfiguration().set("k", "10");
 
         FileInputFormat.setInputPaths(job2, new Path(args[1] + "/temp"));
         FileOutputFormat.setOutputPath(job2, new Path(args[1] + "/final"));
