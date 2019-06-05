@@ -63,7 +63,7 @@ public class HashCounter {
         job2.setInputFormatClass(KeyValueTextInputFormat.class);
         job2.setOutputFormatClass(TextOutputFormat.class);
         
-        job2.getConfiguration().set("k", "10");
+        job2.getConfiguration().set("k", 10);
 
         FileInputFormat.setInputPaths(job2, new Path(args[1] + "/temp"));
         FileOutputFormat.setOutputPath(job2, new Path(args[1] + "/final"));
@@ -120,7 +120,10 @@ public class HashCounter {
     }
 
     public static class SortByValueReduce extends Reducer<IntWritable, Text, Text, IntWritable> {
-        String strk = job2.getConfiguration().get("k");
+        Configuration conf = context.getConfiguration();
+        String strk = conf.get("k");
+        
+       // String strk = job2.getConfiguration().get("k");
         int temp = 0;
         int numk = Integer.parseInt(strk);
          
