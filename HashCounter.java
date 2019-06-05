@@ -126,8 +126,8 @@ public class HashCounter {
     public static class SortByValueReduce extends Reducer<IntWritable, Text, Text, IntWritable> {
         //String topk = Context.getConfiguration().get("k");
  
-        Configuration conf = Context.getConfiguration();
-        conf.get("k");
+        Configuration conf = context.getConfiguration();
+        String topk = conf.get("k");
         
         int temp = 0;
         int numk = Integer.parseInt(topk);
